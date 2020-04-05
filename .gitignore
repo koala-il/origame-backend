@@ -1,0 +1,11 @@
+# IDE files
+.idea
+
+# Python files
+*.sqlite3
+__pycache__
+app/venv
+
+# Coverage files
+.coverage
+htmlcov
