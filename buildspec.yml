@@ -1,0 +1,36 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "us-east-1"
+    REACT_APP_USERS_SERVICE_URL: "http://flask-react-alb-484146607.us-east-1.elb.amazonaws.com"
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - echo logging in to ecr...
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod || true
+
+  build:
+    commands:
+      - echo building and testing dev images...
+      - docker-compose up -d --build
+      - docker-compose exec -T origame python -m pytest -p no:warnings --cov=.
+      - docker-compose exec -T origame flake8 project
+      - docker-compose exec -T origame black project --check
+      - docker-compose exec -T origame /bin/sh -c "isort project/*/*.py --check-only"
+      - echo building prod images...
+      - >
+        docker build \
+          --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
+          -f app/Dockerfile.prod \
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
+          ./app
+  post_build:
+    commands:
+      - echo pushing prod images to ecr...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod
