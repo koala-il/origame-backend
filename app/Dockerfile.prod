@@ -34,4 +34,4 @@ RUN adduser -D myuser
 USER myuser
 
 # run gunicorn
-CMD gunicorn drf_project.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn origame.wsgi:application --bind 0.0.0.0:$PORT
