@@ -20,9 +20,9 @@ phases:
       - echo building and testing dev images...
       - docker-compose up -d --build
       - docker-compose exec -T origame python -m pytest -p no:warnings --cov=.
-      - docker-compose exec -T origame flake8 project
-      - docker-compose exec -T origame black project --check
-      - docker-compose exec -T origame /bin/sh -c "isort project/*/*.py --check-only"
+#      - docker-compose exec -T origame flake8 .
+#      - docker-compose exec -T origame black --check .
+#      - docker-compose exec -T origame /bin/sh -c "isort project/*/*.py --check-only"
       - echo building prod images...
       - >
         docker build \
