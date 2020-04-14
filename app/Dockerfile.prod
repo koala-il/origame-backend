@@ -1,3 +1,37 @@
+###########
+# BUILDER #
+###########
+
+# pull official base image
+FROM python:3.8.1-alpine as builder
+
+# set working directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install psycopg2 dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
+
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+# lint
+COPY . /usr/src/app/
+RUN pip install black flake8 isort
+RUN flake8 .
+RUN black --exclude="migrations|env" .
+RUN isort ./*/*.py
+
+#########
+# FINAL #
+#########
+
 # Pull official Python3.8.1 Docker Image
 FROM python:3.8.1-alpine
 
@@ -8,23 +42,16 @@ WORKDIR /usr/src/app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DEBUG 0
-ENV SECRET_KEY 44eqh2l2bzicjv3u9v@95d(o290%=c8?h3%pwh7%_u8=09n&g9
-ENV DJANGO_ALLOWED_HOSTS .amazonaws.com
 
 # install psycopg2 dependencies - For using PostgreSQL
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev
 
-
-# Install python dependencies
+# install dependencies
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-# Copy endtypoint.sh
-COPY ./entrypoint.sh .
-RUN chmod +x /usr/src/app/entrypoint.sh
+RUN pip install --no-cache /wheels/*
 
 # Copy project code
 COPY . /usr/src/app/
@@ -33,7 +60,9 @@ COPY . /usr/src/app/
 RUN adduser -D myuser
 USER myuser
 
-RUN mkdir /dev/shm
+ENV DEBUG 0
+ENV SECRET_KEY 44eqh2l2bzicjv3u9v@95d(o290%=c8?h3%pwh7%_u8=09n&g9
+ENV DJANGO_ALLOWED_HOSTS="*"
 
 # run gunicorn
 CMD gunicorn origame.wsgi:application --bind 0.0.0.0:$PORT --worker-tmp-dir /dev/shm --workers=1 \
