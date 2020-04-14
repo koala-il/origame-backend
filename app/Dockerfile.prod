@@ -33,5 +33,8 @@ COPY . /usr/src/app/
 RUN adduser -D myuser
 USER myuser
 
+RUN mkdir /dev/shm
+
 # run gunicorn
-CMD gunicorn origame.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn origame.wsgi:application --bind 0.0.0.0:$PORT --worker-tmp-dir /dev/shm --workers=1 \
+        --worker-class=gthread --log-file=-
