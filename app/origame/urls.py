@@ -21,4 +21,5 @@ from origame import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping/", views.ping, name="request-ping"),
+    path("version/", views.version, name="request-app-version"),
 ]

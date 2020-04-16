@@ -14,3 +14,16 @@ def test_ping(client):
 
     assert response.status_code == 200
     assert content["ping"] == "pong!"
+
+
+@pytest.mark.db_django
+def test_version(client):
+    url = reverse("request-app-version")
+
+    response = client.get(url)
+
+    content = json.loads(response.content)
+
+    assert response.status_code == 200
+    assert "version" in content
+    assert isinstance(content["version"], str)
