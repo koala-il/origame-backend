@@ -29,7 +29,6 @@ phases:
           --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
           -f app/Dockerfile.prod \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
-#          --build-arg SECRET_KEY=$SECRETE_KEY
           ./app
   post_build:
     commands:
