@@ -13,7 +13,8 @@ RUN apk update \
 # Install python dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY ./requirements_dev.txt .
+RUN pip install -r requirements_dev.txt
 
 # Copy endtypoint.sh
 COPY ./entrypoint.sh .

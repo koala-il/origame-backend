@@ -8,9 +8,7 @@ from django.urls import reverse
 def test_ping(client):
     url = reverse("request-ping")
 
-    response = client.get(
-        url
-    )
+    response = client.get(url)
 
     content = json.loads(response.content)
 
