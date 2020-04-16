@@ -20,17 +20,20 @@ phases:
       - echo building and testing dev images...
       - docker-compose up -d --build
       - docker-compose exec -T origame python -m pytest -p no:warnings --cov=.
-#      - docker-compose exec -T origame flake8 .
-#      - docker-compose exec -T origame black --check .
-#      - docker-compose exec -T origame /bin/sh -c "isort project/*/*.py --check-only"
+      - docker-compose exec -T origame flake8 .
+      - docker-compose exec -T origame black --check .
+      - docker-compose exec -T origame /bin/sh -c "isort project/*/*.py --check-only"
       - echo building prod images...
       - >
         docker build \
           --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
           -f app/Dockerfile.prod \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod \
+#          --build-arg SECRET_KEY=$SECRETE_KEY
           ./app
   post_build:
     commands:
       - echo pushing prod images to ecr...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/origame-backend:prod
+      - chmod +x ./deploy.sh
+      - bash deploy.sh

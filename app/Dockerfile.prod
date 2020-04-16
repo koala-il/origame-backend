@@ -61,7 +61,7 @@ RUN adduser -D myuser
 USER myuser
 
 ENV DEBUG 0
-ENV SECRET_KEY 44eqh2l2bzicjv3u9v@95d(o290%=c8?h3%pwh7%_u8=09n&g9
+ENV SECRET_KEY $SECRET_KEY
 ENV DJANGO_ALLOWED_HOSTS="*"
 
 # run gunicorn

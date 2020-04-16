@@ -1,0 +1,39 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "origame-backend",
+      "image": "%s.dkr.ecr.us-east-1.amazonaws.com/origame-backend:prod",
+      "essential": true,
+      "memoryReservation": 300,
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 8000
+        }
+      ],
+      "environment": [
+        {
+          "name": "DATABASE_URL",
+          "value": "%s"
+        },
+        {
+          "name": "SECRET_KEY",
+          "value": "%s"
+        },
+        {
+          "name": "PORT",
+          "value": "%s"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "origame-backend-log",
+          "awslogs-region": "us-east-1"
+        }
+      }
+    }
+  ],
+  "family": "origame-td"
+}

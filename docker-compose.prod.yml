@@ -19,6 +19,7 @@ services:
       - origame-db
     environment:
       - PORT=2000
+      - SECRET_KEY="${SECRET_KEY}"
   origame-db:
     image: postgres:12.2-alpine
     volumes:
