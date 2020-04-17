@@ -18,14 +18,27 @@ register_definition() {
   fi
 }
 
+update_service() {
+  # shellcheck disable=SC2039
+  if [[ $(aws ecs update-service --cluster "$cluster" --service "$service" --task-definition "$revision" | $JQ '.service.taskDefinition') != "$revision" ]]; then
+    echo "Error updating service."
+    return 1
+  fi
+}
+
 deploy_cluster() {
 
-  # users
+  cluster="origame"
+
+  # origame
+  service="origame-backend"
   template="ecs_origame_taskdefinition.json"
   task_template=$(cat "ecs/$template")
-  task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $AWS_RDS_URI $PRODUCTION_SECRET_KEY $DJANGO_ORIGAME_PORT)
+  # shellcheck disable=SC2059
+  task_def=$(printf "$task_template" "$AWS_ACCOUNT_ID" "$AWS_RDS_URI" "$PRODUCTION_SECRET_KEY" "$DJANGO_ORIGAME_PORT")
   echo "$task_def"
   register_definition
+  update_service
 
 }
 

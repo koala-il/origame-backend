@@ -13,7 +13,7 @@ def test_ping(client):
     content = json.loads(response.content)
 
     assert response.status_code == 200
-    assert content["ping"] == "pong!"
+    assert content["ping"] == "pong"
 
 
 @pytest.mark.db_django
