@@ -52,8 +52,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    'phonenumber_field',
-    'taggit',
+    "phonenumber_field",
+    "taggit",
     # Project apps
     "users.apps.UsersConfig",
     "crm.apps.CrmConfig",

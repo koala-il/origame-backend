@@ -1,27 +1,11 @@
 import pytest
 
-from crm.models import Customer
+from crm.models import CustomerNote
 
 
 @pytest.mark.django_db
 def test_create_image(add_image):
-    # image_path = os.path.join(settings.BASE_DIR, 'tests', 'crm', 'assets', 'profile.jpg')
-    # with open(image_path, 'rb') as image_file:
-    #     image_uploaded_file = SimpleUploadedFile(
-    #         name="dor_image",
-    #         content=image_file.read(),
-    #         content_type='image/jpeg'
-    #     )
-    #
-    # image_file_object = ImageFile.objects.create(
-    #     title="dor_image",
-    #     file=image_uploaded_file,
-    # )
-
-    image_file_object = add_image(
-        name="dor_image",
-        image_file_name='profile.jpg'
-    )
+    image_file_object = add_image(name="dor_image", image_file_name="profile.jpg")
 
     image_file_object.tags.add("profile")
 
@@ -33,34 +17,21 @@ def test_create_image(add_image):
 
 
 @pytest.mark.django_db
-def test_create_customer(add_image):
+def test_create_customer(add_image, add_customer):
     customer_picture = add_image(
-        name="dor_image",
-        image_file_name='profile.jpg'
+        name=f"dor_image", image_file_name="profile.jpg"
     )
-
-    customer = Customer.objects.create(
-        first_name="Dor",
-        last_name="Bar",
-        address_line_1="Moshav Kanaf, Golan, 1293000",
-        address_line_2="",
-        city="Kanaf",
-        state="Golan",
-        country="Israel",
-        picture=customer_picture,
-        phone="+972502022337",
-        email="dor.b4r@gmail.com",
-        facebook="https://www.facebook.com/dor4231",
-        instagram="https://www.instagram.com/dor4231/",
-        twitter="https://twitter.com/dorb4r",
-        created_date="normal@user.com",
-        last_modify_date="normal@user.com",
+    customer = add_customer(
+        name="Dor",
+        customer_picture=customer_picture
     )
 
     assert customer.first_name == "Dor"
     assert customer.email == "dor.b4r@gmail.com"
     assert customer.phone == "+972502022337"
-    assert int(customer.created_date.timestamp()) == int(customer.last_modify_date.timestamp())
+    assert int(customer.created_date.timestamp()) == int(
+        customer.last_modify_date.timestamp()
+    )
 
     # except AttributeError:
     #     pass
@@ -71,3 +42,28 @@ def test_create_customer(add_image):
     # with self.assertRaises(ValueError):
     #     User.objects.create_user(email='', password="foo")
 
+
+@pytest.mark.django_db
+def test_create_customer_note(add_image, add_customer):
+    customer_picture = add_image(
+        name=f"dor_image", image_file_name="profile.jpg"
+    )
+    customer = add_customer(
+        name="Dor",
+        customer_picture=customer_picture
+    )
+
+    customer_note = CustomerNote.objects.create(
+        customer=customer,
+        title="Note Title",
+        body="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been "
+        "industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type"
+        "and scrambled it to make a type specimen book. It has survived not only five centuries, but also the"
+        "leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s"
+        "with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop"
+        "publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    )
+
+    assert customer_note is not None
+    assert customer_note.title == "Note Title"
+    assert len(customer_note.body) > 300
