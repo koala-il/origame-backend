@@ -52,7 +52,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'phonenumber_field',
+    'taggit',
+    # Project apps
     "users.apps.UsersConfig",
+    "crm.apps.CrmConfig",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 if not DEBUG:
     REST_FRAMEWORK = {

@@ -9,3 +9,6 @@ app/venv
 # Coverage files
 .coverage
 htmlcov
+
+# Django Files
+/app/media/
