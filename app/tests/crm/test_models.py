@@ -17,12 +17,15 @@ def test_create_image(add_image):
 
 
 @pytest.mark.django_db
-def test_create_customer(add_image, add_customer):
+def test_create_customer(add_image, add_customer, add_user):
+    user = add_user()
+
     customer_picture = add_image(
         name=f"dor_image", image_file_name="profile.jpg"
     )
     customer = add_customer(
         name="Dor",
+        user=user,
         customer_picture=customer_picture
     )
 
@@ -33,23 +36,17 @@ def test_create_customer(add_image, add_customer):
         customer.last_modify_date.timestamp()
     )
 
-    # except AttributeError:
-    #     pass
-    # with self.assertRaises(TypeError):
-    #     User.objects.create_user()
-    # with self.assertRaises(TypeError):
-    #     User.objects.create_user(email='')
-    # with self.assertRaises(ValueError):
-    #     User.objects.create_user(email='', password="foo")
-
 
 @pytest.mark.django_db
-def test_create_customer_note(add_image, add_customer):
+def test_create_customer_note(add_user, add_image, add_customer):
+    user = add_user()
+
     customer_picture = add_image(
         name=f"dor_image", image_file_name="profile.jpg"
     )
     customer = add_customer(
         name="Dor",
+        user=user,
         customer_picture=customer_picture
     )
 

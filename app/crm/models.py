@@ -5,6 +5,13 @@ from taggit.managers import TaggableManager
 
 
 class Customer(models.Model):
+    user = models.ForeignKey(
+        'users.CustomUser',
+        on_delete=models.SET_NULL,
+        blank=False,
+        null=True,
+        related_name="customers"
+    )
     first_name = models.CharField(max_length=150, blank=False, null=False)
     last_name = models.CharField(max_length=150, blank=True, null=True)
     address_line_1 = models.CharField(max_length=250, blank=True, null=True)

@@ -2,9 +2,11 @@ import os
 
 import pytest
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from crm.models import ImageFile, Customer
+from users.models import CustomUser
 
 
 @pytest.fixture(scope="function")
@@ -28,8 +30,9 @@ def add_image():
 
 @pytest.fixture(scope="function")
 def add_customer():
-    def _add_customer(name, customer_picture):
+    def _add_customer(name, user: CustomUser, customer_picture):
         customer = Customer.objects.create(
+            user=user,
             first_name=name,
             last_name="Bar",
             address_line_1="Moshav Kanaf, Golan, 1293000",
@@ -48,3 +51,14 @@ def add_customer():
         return customer
 
     return _add_customer
+
+
+@pytest.fixture(scope="function")
+def add_user():
+    def _add_user():
+        User = get_user_model()
+        user = User.objects.create_user(email="normal@user.com", password="foo")
+
+        return user
+
+    return _add_user
