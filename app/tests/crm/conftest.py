@@ -36,7 +36,7 @@ def add_customer():
             address_line_2="",
             city="Kanaf",
             state="Golan",
-            country="Israel",
+            country="IL",
             picture=customer_picture,
             phone="+972502022337",
             email="dor.b4r@gmail.com",

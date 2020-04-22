@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 from taggit.managers import TaggableManager
 
@@ -10,7 +11,7 @@ class Customer(models.Model):
     address_line_2 = models.CharField(max_length=250, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
+    country = CountryField(blank=True, null=True)
     picture = models.ForeignKey(
         "ImageFile", blank=True, null=True, on_delete=models.SET_NULL, related_name="+"
     )
