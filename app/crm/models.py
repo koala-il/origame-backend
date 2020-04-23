@@ -33,6 +33,13 @@ class Customer(models.Model):
 
 
 class ImageFile(models.Model):
+    user = models.ForeignKey(
+        'users.CustomUser',
+        on_delete=models.SET_NULL,
+        blank=False,
+        null=True,
+        related_name="images"
+    )
     title = models.CharField(max_length=150, blank=False, null=True)
     file = models.ImageField(upload_to="images", blank=False, null=False)
     # Meta Data
