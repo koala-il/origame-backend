@@ -16,13 +16,29 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import permissions
+from rest_framework.documentation import include_docs_urls
 
 from origame import views
+
+schema_view = get_schema_view(
+    openapi.Info(title="Movies API", default_version="v1"),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ping/", views.ping, name="request-ping"),
     path("version/", views.version, name="request-app-version"),
+
+    # API Documentation
+    path(
+        "api/swagger-docs/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("api/docs/", include_docs_urls(title="Movies API")),
 
     url(r'^auth/', include('djoser.urls')),
     url(r'^auth/', include('djoser.urls.jwt')),
