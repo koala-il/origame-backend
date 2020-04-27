@@ -28,8 +28,8 @@ class Customer(models.Model):
     instagram = models.URLField(blank=True, null=True)
     twitter = models.URLField(blank=True, null=True)
     # Meta Data
-    created_date = models.DateTimeField(auto_now_add=True)
-    last_modify_date = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
 
 class ImageFile(models.Model):
@@ -43,8 +43,8 @@ class ImageFile(models.Model):
     title = models.CharField(max_length=150, blank=False, null=True)
     file = models.ImageField(upload_to="images", blank=False, null=False)
     # Meta Data
-    created_date = models.DateTimeField(auto_now_add=True)
-    last_modify_date = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     tags = TaggableManager()
 
@@ -60,5 +60,5 @@ class CustomerNote(models.Model):
     title = models.CharField(max_length=150, blank=True, null=True)
     body = models.TextField(blank=False, null=False)
     # Meta Data
-    created_date = models.DateTimeField(auto_now_add=True)
-    last_modify_date = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)

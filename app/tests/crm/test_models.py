@@ -36,7 +36,7 @@ def test_create_customer(add_image, add_customer, get_user):
     assert customer.email == "dor.b4r@gmail.com"
     assert customer.phone == "+972502022337"
     assert int(customer.created_date.timestamp()) == int(
-        customer.last_modify_date.timestamp()
+        customer.modified_at.timestamp()
     )
 
 
