@@ -2,7 +2,6 @@ import os
 
 import pytest
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from crm.models import ImageFile, Customer
@@ -55,14 +54,3 @@ def add_customer():
         return customer
 
     return _add_customer
-
-
-@pytest.fixture(scope="function")
-def add_user():
-    def _add_user():
-        User = get_user_model()
-        user = User.objects.create_user(email="normal@user.com", password="foo")
-
-        return user
-
-    return _add_user

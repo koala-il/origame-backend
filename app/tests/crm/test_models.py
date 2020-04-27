@@ -4,8 +4,8 @@ from crm.models import CustomerNote
 
 
 @pytest.mark.django_db
-def test_create_image(add_image, add_user):
-    user = add_user()
+def test_create_image(add_image, get_user):
+    user = get_user()
     image_file_object = add_image(name="dor_image", image_file_name="profile.jpg", user=user)
 
     image_file_object.tags.add("profile")
@@ -18,8 +18,8 @@ def test_create_image(add_image, add_user):
 
 
 @pytest.mark.django_db
-def test_create_customer(add_image, add_customer, add_user):
-    user = add_user()
+def test_create_customer(add_image, add_customer, get_user):
+    user = get_user()
 
     customer_picture = add_image(
         name=f"dor_image",
@@ -41,8 +41,8 @@ def test_create_customer(add_image, add_customer, add_user):
 
 
 @pytest.mark.django_db
-def test_create_customer_note(add_user, add_image, add_customer):
-    user = add_user()
+def test_create_customer_note(get_user, add_image, add_customer):
+    user = get_user()
 
     customer_picture = add_image(
         name=f"dor_image",
