@@ -10,4 +10,4 @@ class CustomerSerializer(CountryFieldMixin, ModelSerializer):
     class Meta:
         model = Customer
         fields = "__all__"
-        read_only_fields = ("created_at", "modified_at")
+        read_only_fields = ("id", "created_at", "modified_at")
