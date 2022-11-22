@@ -8,7 +8,7 @@ djangorestframework_simplejwt==4.4.0
 djoser==2.0.3
 drf-yasg==1.17.0
 gunicorn==20.0.4
-Pillow==7.1.1
+Pillow==9.3.0
 phonenumbers==8.12.2
 psycopg2-binary==2.8.5
 social-auth-app-django==3.1.0
